@@ -1,0 +1,5 @@
+# Used by goreleaser only: it copies the pre-built, per-arch binary into the
+# build context, so this file must not compile anything.
+FROM gcr.io/distroless/static:nonroot
+COPY trimci-agent /trimci-agent
+ENTRYPOINT ["/trimci-agent"]

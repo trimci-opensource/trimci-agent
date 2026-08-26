@@ -1,0 +1,12 @@
+# Build output
+/dist/
+/trimci-agent
+/trimci-agent.exe
+*.test
+
+# Coverage
+coverage.out
+
+# Editor noise
+.idea/
+.vscode/

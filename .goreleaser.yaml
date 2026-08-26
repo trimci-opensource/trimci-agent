@@ -1,0 +1,80 @@
+version: 2
+project_name: trimci-agent
+
+builds:
+  - id: trimci-agent
+    main: ./cmd/trimci-agent
+    binary: trimci-agent
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X github.com/trimci/agent/internal/version.Version={{ .Version }}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: github
+
+dockers:
+  - id: linux-amd64
+    use: buildx
+    goos: linux
+    goarch: amd64
+    dockerfile: Dockerfile.goreleaser
+    image_templates:
+      - ghcr.io/trimci/agent:{{ .Version }}-amd64
+    build_flag_templates:
+      - --platform=linux/amd64
+  - id: linux-arm64
+    use: buildx
+    goos: linux
+    goarch: arm64
+    dockerfile: Dockerfile.goreleaser
+    image_templates:
+      - ghcr.io/trimci/agent:{{ .Version }}-arm64
+    build_flag_templates:
+      - --platform=linux/arm64
+
+docker_manifests:
+  # Tag ladder: 1.2.3, 1.2, 1, latest — the dashboard's install command
+  # pins the major (ghcr.io/trimci/agent:1).
+  - name_template: ghcr.io/trimci/agent:{{ .Version }}
+    image_templates:
+      - ghcr.io/trimci/agent:{{ .Version }}-amd64
+      - ghcr.io/trimci/agent:{{ .Version }}-arm64
+  - name_template: ghcr.io/trimci/agent:{{ .Major }}.{{ .Minor }}
+    image_templates:
+      - ghcr.io/trimci/agent:{{ .Version }}-amd64
+      - ghcr.io/trimci/agent:{{ .Version }}-arm64
+  - name_template: ghcr.io/trimci/agent:{{ .Major }}
+    image_templates:
+      - ghcr.io/trimci/agent:{{ .Version }}-amd64
+      - ghcr.io/trimci/agent:{{ .Version }}-arm64
+  - name_template: ghcr.io/trimci/agent:latest
+    image_templates:
+      - ghcr.io/trimci/agent:{{ .Version }}-amd64
+      - ghcr.io/trimci/agent:{{ .Version }}-arm64
+
+release:
+  draft: false
+  footer: |
+    **Verify checksums**: download `checksums.txt` and run `sha256sum -c checksums.txt --ignore-missing`.
