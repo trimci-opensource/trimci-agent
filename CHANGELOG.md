@@ -6,6 +6,12 @@ All notable changes to the TrimCI Agent. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Docs and log wording: a revoked TrimCI token is never un-revoked server-side,
+  so recovery is a restart with the newly minted token (the agent keeps retrying
+  and never exits meanwhile); the 426 contract is the stable error envelope.
+
 ### Added
 
 - Initial agent: hello control loop, GitLab CI collector with the

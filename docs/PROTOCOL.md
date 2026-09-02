@@ -51,7 +51,7 @@ Codes are the API contract; messages are advisory and may change.
 | Code | Status | Meaning / required agent behavior |
 |---|---|---|
 | `invalid_token` | 401 | Malformed/unknown token. Log actionably, retry slowly, never exit. |
-| `token_revoked` | 401 | Token revoked/expired. Same as above; a newly configured token recovers without restart. |
+| `token_revoked` | 401 | Token revoked/expired. Same as above; a revoked token is never un-revoked server-side — the operator restarts the agent with a newly minted token. |
 | `connection_suspended` | 409 | Connection paused or suspended. Keep sending hello (it still authenticates); push nothing until `paused` clears. |
 | `sync_in_progress` | 409 | Another request for this connection is in flight (stuck slot or duplicate agent). Short pause, bounded retries. |
 | `unknown_repo` | 404 | Repo not active on this connection (deactivated mid-flight). Skip it; the next hello won't list it. |
@@ -299,7 +299,7 @@ to exhaustion — honoring 429s — regardless of due flags in any interleaved h
 | `413` | Halve the batch, floor 1. |
 | Two consecutive 5xx/timeouts for the *same* batch | Halve it too (a batch that consistently exceeds the server's processing window would otherwise livelock at full size). |
 | A single-run batch that still fails | Skip it, report it in the next hello (poison-pill rule, agent half). It is retried naturally next cycle. |
-| `401` | Log actionably (with the dashboard URL), retry slowly, never exit; recover without restart once a valid token is configured. |
+| `401` | Log actionably (with the dashboard URL), retry slowly, never exit; the operator restarts the agent with a newly minted token (a revoked token is never un-revoked server-side). |
 | `409 connection_suspended` | Stop pushing; keep hello polling. |
 | `409 sync_in_progress` | Short pause (~30 s), a few retries, then leave the repo for the next cycle. |
 | `426` | Log loudly, poll hello slowly, wait for an operator upgrade. |
@@ -313,4 +313,7 @@ to exhaustion — honoring 429s — regardless of due flags in any interleaved h
   keep working for the lifetime of the major.
 - A breaking change ships as `/ingest/v2/` alongside v1 through a published sunset
   window; a retired version answers `426 protocol_unsupported`.
+- The error envelope and the `426` answer are stable across majors by contract —
+  that is what lets a retired agent keep polling `hello` slowly and always read a
+  parseable answer until the operator upgrades it.
 - `min_agent_version` in hello is a soft floor — a nudge, never a brick.

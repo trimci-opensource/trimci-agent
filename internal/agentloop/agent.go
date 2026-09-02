@@ -41,12 +41,14 @@ const (
 	// final flag — stays due and resumes when the window opens.
 	inlineRetryAfterCeiling = 90 * time.Second
 	// tokenRetryDelay paces hello retries while the token is rejected: slow
-	// enough to be polite, fast enough that a freshly minted token recovers
-	// the agent within minutes, without a restart.
+	// enough to be polite, fast enough that the operator's fix is noticed
+	// within minutes. A revoked token is never un-revoked server-side, so
+	// the fix is a restart with the newly minted token — the process itself
+	// never exits.
 	tokenRetryDelay = 5 * time.Minute
 	// protocolRetryDelay paces hello while the server says this protocol
-	// version is retired (426): keep polling slowly — hello stays
-	// shape-compatible across versions by contract.
+	// version is retired (426): keep polling slowly — the error envelope
+	// and the 426 answer are stable across versions by contract.
 	protocolRetryDelay  = 15 * time.Minute
 	defaultPollInterval = 60 * time.Second
 )
@@ -142,14 +144,14 @@ func (a *Agent) buildHello(ctx context.Context) api.HelloRequest {
 }
 
 // classifyHelloFailure logs the failure in operator terms and returns the
-// retry delay. The agent never exits on server-side trouble: a revoked
-// token, a retired protocol or an outage all keep polling and recover
-// without a restart.
+// retry delay. The agent never exits on server-side trouble: an outage
+// recovers by itself, while a revoked token or a retired protocol keep
+// polling slowly until the operator restarts with a new token / upgrades.
 func (a *Agent) classifyHelloFailure(err error, b *backoff.Backoff) time.Duration {
 	switch {
 	case api.IsCode(err, api.CodeTokenRevoked) || api.IsCode(err, api.CodeInvalidToken) || api.Status(err) == 401:
 		a.Log.Error("TrimCI rejected the agent token — rotate or re-issue it in the dashboard "+
-			"(Integration health); the agent will keep retrying and recovers without a restart",
+			"(Integration health), then restart the agent with the new token; it keeps retrying meanwhile",
 			"dashboard", a.DashboardURL, "error", err)
 		return tokenRetryDelay
 	case api.Status(err) == 426:

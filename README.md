@@ -179,8 +179,8 @@ Found a vulnerability? See [SECURITY.md](SECURITY.md).
   is safe — the server's writes are idempotent.
 - **Token rotation**: rotate in the dashboard (the old token keeps working for
   24 hours), update the env, restart the agent. A revoked token does **not** crash
-  the agent — it logs an actionable error, keeps retrying slowly, and recovers the
-  moment a valid token is configured.
+  the agent — it logs an actionable error and keeps retrying slowly; restart it with
+  the new token to resume (a revoked token is never un-revoked server-side).
 - **Upgrades** are manual on purpose — you control what runs in your network. The
   dashboard shows a chip when a newer agent version is available.
 - **One agent per GitLab instance.** Don't run two replicas on one token: the second
