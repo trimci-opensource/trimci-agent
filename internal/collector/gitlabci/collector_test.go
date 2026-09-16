@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/trimci/agent/internal/collector"
+	"github.com/trimci-opensource/trimci-agent/internal/collector"
 )
 
 // fakeGitLab is a minimal in-memory GitLab API for collector tests: real

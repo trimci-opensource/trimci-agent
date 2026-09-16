@@ -16,14 +16,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/trimci/agent/internal/agentloop"
-	"github.com/trimci/agent/internal/api"
-	"github.com/trimci/agent/internal/backoff"
-	"github.com/trimci/agent/internal/collector/gitlabci"
-	"github.com/trimci/agent/internal/config"
-	"github.com/trimci/agent/internal/healthz"
-	"github.com/trimci/agent/internal/logredact"
-	"github.com/trimci/agent/internal/version"
+	"github.com/trimci-opensource/trimci-agent/internal/agentloop"
+	"github.com/trimci-opensource/trimci-agent/internal/api"
+	"github.com/trimci-opensource/trimci-agent/internal/backoff"
+	"github.com/trimci-opensource/trimci-agent/internal/collector/gitlabci"
+	"github.com/trimci-opensource/trimci-agent/internal/config"
+	"github.com/trimci-opensource/trimci-agent/internal/healthz"
+	"github.com/trimci-opensource/trimci-agent/internal/logredact"
+	"github.com/trimci-opensource/trimci-agent/internal/version"
 )
 
 func main() {

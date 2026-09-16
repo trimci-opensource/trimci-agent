@@ -4,14 +4,6 @@
 
 Email **office@trimci.com** (see also
 [trimci.com/.well-known/security.txt](https://trimci.com/.well-known/security.txt)).
-Please do **not** open a public GitHub issue for security reports. We aim to
-acknowledge reports within 3 business days. Preferred languages: English, Polish.
-
-## Supported versions
-
-The latest released minor version receives fixes. Within protocol v1, old agents
-keep working (the protocol evolves additively), but security fixes are not
-backported — upgrade to the newest release.
 
 ## Security model (short version)
 
@@ -33,4 +25,4 @@ backported — upgrade to the newest release.
   (`go.mod` lists none), so there is no supply chain beyond the Go toolchain and
   this repository's ~2,000 auditable lines.
 - **Verifiable releases**: binaries ship with SHA-256 checksums; images are
-  published to `ghcr.io/trimci/agent` from the tagged source via GitHub Actions.
+  published to `ghcr.io/trimci-opensource/trimci-agent` from the tagged source via GitHub Actions.

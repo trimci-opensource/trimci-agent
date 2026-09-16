@@ -1,3 +1,3 @@
-module github.com/trimci/agent
+module github.com/trimci-opensource/trimci-agent
 
 go 1.24

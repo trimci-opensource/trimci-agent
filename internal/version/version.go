@@ -1,7 +1,7 @@
 // Package version carries the agent's build version.
 //
 // Version is stamped at release time via
-// -ldflags "-X github.com/trimci/agent/internal/version.Version=1.2.3"
+// -ldflags "-X github.com/trimci-opensource/trimci-agent/internal/version.Version=1.2.3"
 // (see .goreleaser.yaml). Development builds report "0.0.0-dev".
 package version
 

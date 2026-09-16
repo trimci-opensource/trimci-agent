@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/trimci/agent/internal/api"
-	"github.com/trimci/agent/internal/backoff"
-	"github.com/trimci/agent/internal/collector"
+	"github.com/trimci-opensource/trimci-agent/internal/api"
+	"github.com/trimci-opensource/trimci-agent/internal/backoff"
+	"github.com/trimci-opensource/trimci-agent/internal/collector"
 )
 
 const (

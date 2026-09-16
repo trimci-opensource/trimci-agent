@@ -1,0 +1,19 @@
+# Keeps the only third-party inputs of this repository current. The Go module
+# has zero dependencies, so `gomod` only ever proposes a toolchain bump.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly

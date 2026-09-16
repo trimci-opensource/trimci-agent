@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/trimci/agent/internal/api"
-	"github.com/trimci/agent/internal/collector"
+	"github.com/trimci-opensource/trimci-agent/internal/api"
+	"github.com/trimci-opensource/trimci-agent/internal/collector"
 )
 
 const testToken = "trimci_agent_TESTKEY1_secret-secret-secret"

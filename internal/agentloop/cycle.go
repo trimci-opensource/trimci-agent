@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/trimci/agent/internal/api"
-	"github.com/trimci/agent/internal/backoff"
-	"github.com/trimci/agent/internal/collector"
+	"github.com/trimci-opensource/trimci-agent/internal/api"
+	"github.com/trimci-opensource/trimci-agent/internal/backoff"
+	"github.com/trimci-opensource/trimci-agent/internal/collector"
 )
 
 // errRepoGone means the server no longer owns/actives this repo (404

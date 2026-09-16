@@ -10,7 +10,7 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w -X github.com/trimci/agent/internal/version.Version={{ .Version }}
+      - -s -w -X github.com/trimci-opensource/trimci-agent/internal/version.Version={{ .Version }}
     goos:
       - linux
       - darwin
@@ -41,38 +41,46 @@ dockers:
     goarch: amd64
     dockerfile: Dockerfile.goreleaser
     image_templates:
-      - ghcr.io/trimci/agent:{{ .Version }}-amd64
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-amd64
     build_flag_templates:
       - --platform=linux/amd64
+      - --label=org.opencontainers.image.title=trimci-agent
+      - --label=org.opencontainers.image.version={{ .Version }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+      - --label=org.opencontainers.image.created={{ .Date }}
   - id: linux-arm64
     use: buildx
     goos: linux
     goarch: arm64
     dockerfile: Dockerfile.goreleaser
     image_templates:
-      - ghcr.io/trimci/agent:{{ .Version }}-arm64
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-arm64
     build_flag_templates:
       - --platform=linux/arm64
+      - --label=org.opencontainers.image.title=trimci-agent
+      - --label=org.opencontainers.image.version={{ .Version }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+      - --label=org.opencontainers.image.created={{ .Date }}
 
 docker_manifests:
   # Tag ladder: 1.2.3, 1.2, 1, latest — the dashboard's install command
-  # pins the major (ghcr.io/trimci/agent:1).
-  - name_template: ghcr.io/trimci/agent:{{ .Version }}
+  # pins the major (ghcr.io/trimci-opensource/trimci-agent:1).
+  - name_template: ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}
     image_templates:
-      - ghcr.io/trimci/agent:{{ .Version }}-amd64
-      - ghcr.io/trimci/agent:{{ .Version }}-arm64
-  - name_template: ghcr.io/trimci/agent:{{ .Major }}.{{ .Minor }}
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-amd64
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-arm64
+  - name_template: ghcr.io/trimci-opensource/trimci-agent:{{ .Major }}.{{ .Minor }}
     image_templates:
-      - ghcr.io/trimci/agent:{{ .Version }}-amd64
-      - ghcr.io/trimci/agent:{{ .Version }}-arm64
-  - name_template: ghcr.io/trimci/agent:{{ .Major }}
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-amd64
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-arm64
+  - name_template: ghcr.io/trimci-opensource/trimci-agent:{{ .Major }}
     image_templates:
-      - ghcr.io/trimci/agent:{{ .Version }}-amd64
-      - ghcr.io/trimci/agent:{{ .Version }}-arm64
-  - name_template: ghcr.io/trimci/agent:latest
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-amd64
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-arm64
+  - name_template: ghcr.io/trimci-opensource/trimci-agent:latest
     image_templates:
-      - ghcr.io/trimci/agent:{{ .Version }}-amd64
-      - ghcr.io/trimci/agent:{{ .Version }}-arm64
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-amd64
+      - ghcr.io/trimci-opensource/trimci-agent:{{ .Version }}-arm64
 
 release:
   draft: false

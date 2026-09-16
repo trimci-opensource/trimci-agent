@@ -14,7 +14,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/trimci/agent/internal/api"
+	"github.com/trimci-opensource/trimci-agent/internal/api"
 )
 
 // RunsPage is one ascending page of runs handed to the ListRuns callback.

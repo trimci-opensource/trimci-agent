@@ -14,7 +14,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/trimci/agent/internal/backoff"
+	"github.com/trimci-opensource/trimci-agent/internal/backoff"
 )
 
 const (

@@ -1,5 +1,9 @@
 # TrimCI Agent
 
+[![CI](https://github.com/trimci-opensource/trimci-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/trimci-opensource/trimci-agent/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/trimci-opensource/trimci-agent)](https://github.com/trimci-opensource/trimci-agent/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A single-binary, stateless, open-source agent that brings [TrimCI](https://trimci.com)'s
 CI/CD failure analysis to GitLab instances behind VPNs and private networks — without
 opening a single inbound port.
@@ -28,7 +32,7 @@ docker run -d --restart unless-stopped --name trimci-agent \
   -e TRIMCI_TOKEN='trimci_agent_…' \
   -e GITLAB_URL='https://gitlab.your-company.internal' \
   -e GITLAB_TOKEN='YOUR-READ-API-PAT' \
-  ghcr.io/trimci/agent:1
+  ghcr.io/trimci-opensource/trimci-agent:1
 ```
 
 2. `GITLAB_TOKEN` is a GitLab access token (personal, group, or project) with the
@@ -41,7 +45,7 @@ docker run -d --restart unless-stopped --name trimci-agent \
 ```yaml
 services:
   trimci-agent:
-    image: ghcr.io/trimci/agent:1
+    image: ghcr.io/trimci-opensource/trimci-agent:1
     restart: unless-stopped
     environment:
       TRIMCI_TOKEN: 'trimci_agent_…'
@@ -52,7 +56,7 @@ services:
 ### Static binary + systemd
 
 Download the binary for your platform from the
-[releases page](https://github.com/trimci/agent/releases) and verify it:
+[releases page](https://github.com/trimci-opensource/trimci-agent/releases) and verify it:
 
 ```bash
 sha256sum -c checksums.txt --ignore-missing
@@ -202,7 +206,7 @@ Run the tests the same way:
 ```bash
 go test ./...
 # or:
-docker run --rm -v "$PWD:/src" -w /src golang:1.24 go test ./...
+docker run --rm -v "$PWD:/src" -w /src golang:1.27 go test ./...
 ```
 
 ## Protocol
