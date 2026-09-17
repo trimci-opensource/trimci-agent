@@ -24,8 +24,17 @@ verifiably, every URL this agent can request.
 ## 60-second quickstart
 
 1. In the TrimCI dashboard, add a connector: **GitLab → Behind a VPN / private
-   network**. You get an agent token (shown once) and this ready-to-run command with
-   the token pre-filled:
+   network**. You get an agent token (shown once) and a ready-to-run `docker run`
+   command with the token pre-filled.
+2. Create a GitLab access token (personal, group, or project) with the `read_api`
+   scope — *Edit profile → Access tokens*, or *Settings → Access tokens* on a group or
+   project. It stays on your machine: the agent only ever sends it to your GitLab.
+3. Run the agent on any machine inside your network that can reach GitLab and has
+   outbound HTTPS to trimci.com — a small VM, the runner host, or a laptop for a trial.
+   Docker Desktop on Windows and macOS works the same as Docker on Linux (the image
+   ships for `linux/amd64` and `linux/arm64`, so Apple Silicon runs it natively).
+
+**Linux / macOS** (bash or zsh):
 
 ```bash
 docker run -d --restart unless-stopped --name trimci-agent \
@@ -35,10 +44,29 @@ docker run -d --restart unless-stopped --name trimci-agent \
   ghcr.io/trimci-opensource/trimci-agent:1
 ```
 
-2. `GITLAB_TOKEN` is a GitLab access token (personal, group, or project) with the
-   `read_api` scope. It stays on your machine.
-3. Watch the dashboard flip to **Connected** within a minute, pick the projects to
-   track, done.
+**Windows** (PowerShell — the backtick is PowerShell's line continuation; one long line
+without backticks works too):
+
+```powershell
+docker run -d --restart unless-stopped --name trimci-agent `
+  -e TRIMCI_TOKEN='trimci_agent_…' `
+  -e GITLAB_URL='https://gitlab.your-company.internal' `
+  -e GITLAB_TOKEN='YOUR-READ-API-PAT' `
+  ghcr.io/trimci-opensource/trimci-agent:1
+```
+
+Keep the single quotes in both shells: they stop `$` and other special characters inside
+the tokens from being interpreted. From `cmd.exe`, put everything on one line and use double
+quotes instead.
+
+4. Check the first log lines — the same command on every platform:
+
+```bash
+docker logs -f trimci-agent
+```
+
+You should see `agent starting …` followed by `catalog pushed …`. Within a minute the
+dashboard page flips to **Connected**; pick the projects to track — done.
 
 ### docker compose
 
@@ -99,6 +127,25 @@ sudo systemctl enable --now trimci-agent
 ```
 
 Prefer cron? `trimci-agent -once` runs a single sync cycle and exits.
+
+### Windows without Docker
+
+Download `trimci-agent_<version>_windows_amd64.zip` from the releases page, check its hash
+against `checksums.txt` (`Get-FileHash .\trimci-agent_<version>_windows_amd64.zip -Algorithm SHA256`),
+unzip it, and run it from PowerShell:
+
+```powershell
+$env:TRIMCI_TOKEN = 'trimci_agent_…'
+$env:GITLAB_URL   = 'https://gitlab.your-company.internal'
+$env:GITLAB_TOKEN = 'YOUR-READ-API-PAT'
+.\trimci-agent.exe
+```
+
+To keep it running unattended, start it from a small wrapper script (which sets the three
+variables) registered in *Task Scheduler → Create Task → Triggers: At startup*, or wrap it as
+a Windows service with a tool such as NSSM. `-once` works the same way for a scheduled task
+that runs every few minutes.
+
 
 ## Configuration
 
