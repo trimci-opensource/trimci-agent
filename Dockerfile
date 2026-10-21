@@ -12,7 +12,7 @@ RUN CGO_ENABLED=0 go build -trimpath \
 
 # distroless/static: CA certificates and a nonroot user, no shell, no package
 # manager, nothing else — the whole image is the agent binary.
-FROM gcr.io/distroless/static:nonroot@sha256:e2e927ec666bae08560abb3c55d0659eceabb657f56b6782ab500a9fc7f555e3
+FROM gcr.io/distroless/static:nonroot@sha256:d62067879de890a1def9da0e7766b7d20810a5e5555cef8506b752437d7a3e88
 LABEL org.opencontainers.image.source="https://github.com/trimci-opensource/trimci-agent"
 LABEL org.opencontainers.image.description="TrimCI Agent - GitLab CI push agent for private networks (outbound-only, zero code access)"
 LABEL org.opencontainers.image.licenses="MIT"
